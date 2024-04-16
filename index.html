@@ -28,7 +28,12 @@
                 display: inline-block;
                 overflow: hidden;
             }
-            
+
+            .range-wrapper {
+                position: fixed;
+                right: 50px;
+                top: 50px;
+            }
         </style>
     </head>
     <body>
@@ -36,7 +41,11 @@
             <img class="js-zoom-target" src="./20240409000947_001.jpg" alt="" />
         </div>
 
-
+        <div class="range-wrapper">
+            <input type="range" id="pi_input" name="volume" min="0" max="11" value="2"/>
+            <p id="value"></p>
+            <label for="volume">Volume</label>
+        </div>
         <script src="main.js"></script>
     </body>
 </html>
