@@ -8,7 +8,6 @@ imgElement.onload = () => {
     canvas.height = imgElement.height; // 画像の高さを取得
 
     imgElement.addEventListener("mousemove", (event) => {
-
         const x = event.offsetX;
         const y = event.offsetY;
 
@@ -16,14 +15,14 @@ imgElement.onload = () => {
 
         const centerX = x;
         const centerY = y;
-        
 
-        ctx.drawImage(imgElement, -centerX, -centerY, canvas.width * 1.5, canvas.height * 1.5); // 画像を描画する方法を決定
+        ctx.drawImage(imgElement, -centerX / 2, -centerY / 2, canvas.width * 1.5, canvas.height * 1.5); // 画像を描画する方法を決定
 
         // canvas要素を画面に表示
         const rectElement = document.createElement("div");
         rectElement.classList.add("rect");
         rectElement.style.cssText = `
+        display: inline-block;
   width: ${canvas.width}px;
   height: ${canvas.height}px;
   position: absolute;
@@ -34,5 +33,3 @@ imgElement.onload = () => {
         document.body.appendChild(rectElement);
     });
 };
-
-
