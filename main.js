@@ -23,26 +23,38 @@ imgElement.onload = () => {
             });
         }
 
-        console.log('left' + event.offsetX);
-        console.log('画像' + (imgElement.width - 50));
-        console.log(imgElement.width);
         let left = event.offsetX;
         let top = event.offsetY;
 
-        if(left > imgElement.width - 125) {
-            left = imgElement.width - 125;
-        }
-        if(top > imgElement.height - 125) {
-            top = imgElement.height - 125;
-        }
-        if(left <  125) {
-            left = 125;
-        }
-        if(top < 125) {
-            top = 125;
+        let xmax;
+        let ymax;
+
+        switch (magnification) {
+            case "2":
+                xmax = imgElement.width * 0.75;
+                ymax = imgElement.height * 0.75;
+                break;
+            // case "3":
+            //     xmax = imgElement.width * 0.4;
+            //     ymax = imgElement.height * 0.4;
+            //     break;
+
+            default:
+                break;
         }
 
-
+        if (left > xmax) {
+            left = xmax;
+        }
+        if (top > ymax) {
+            top = ymax;
+        }
+        if (left < imgElement.width - xmax) {
+            left = imgElement.width - xmax;
+        }
+        if (top < imgElement.height - ymax) {
+            top = imgElement.height - ymax;
+        }
 
         const imageOffsetX = left - (canvas.width - imgElement.width) / 2;
         const imageOffsetY = top - (canvas.height - imgElement.height) / 2;
