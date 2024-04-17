@@ -23,14 +23,36 @@ imgElement.onload = () => {
             });
         }
 
-        const imageOffsetX = event.offsetX - (canvas.width - imgElement.width) / 2;
-        const imageOffsetY = event.offsetY - (canvas.height - imgElement.height) / 2;
+        console.log('left' + event.offsetX);
+        console.log('画像' + (imgElement.width - 50));
+        console.log(imgElement.width);
+        let left = event.offsetX;
+        let top = event.offsetY;
+
+        if(left > imgElement.width - 125) {
+            left = imgElement.width - 125;
+        }
+        if(top > imgElement.height - 125) {
+            top = imgElement.height - 125;
+        }
+        if(left <  125) {
+            left = 125;
+        }
+        if(top < 125) {
+            top = 125;
+        }
+
+
+
+        const imageOffsetX = left - (canvas.width - imgElement.width) / 2;
+        const imageOffsetY = top - (canvas.height - imgElement.height) / 2;
 
         const centerX = parseInt(imageOffsetX) * magnification;
         const centerY = imageOffsetY * magnification;
 
         let positionX;
         let positionY;
+
         if (magnification !== 1) {
             positionX = -centerX + canvas.width * magnification * 0.5 - canvas.width * 0.5;
             positionY = -centerY + canvas.height * magnification * 0.5 - canvas.height * 0.5;
