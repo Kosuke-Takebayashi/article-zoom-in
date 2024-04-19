@@ -1,21 +1,30 @@
-const imgElement = document.querySelector("img"); // 画像
+const imgElement = document.querySelector("img");
 const canvas = document.createElement("canvas"); // canvas要素を生成
-const ctx = canvas.getContext("2d"); // 2次元のオブジェクトを作成
+const ctx = canvas.getContext("2d"); // 2次元の描画コンテキストを作成
 
 const value = document.querySelector("#value");
-const input = document.querySelector("#pi_input");
-let magnification = input.value; // 拡大倍率
-value.textContent = input.value;
+const input = document.querySelector("#magnification");
+let magnification = input.value; // 拡大倍率を取得
+value.textContent = input.value; // 拡大倍率を表示
+
+/**
+ * レンジスライダーを動かしたときに拡大倍率を変更する
+ */
 input.addEventListener("input", (event) => {
     magnification = input.value;
     value.textContent = event.target.value;
 });
 
-// 画像が読み込まれたら以下の処理を実行
+/**
+ * 元の画像が読み込まれたときに、ズームの処理を実行する
+ */
 imgElement.onload = () => {
-    canvas.width = imgElement.width; // 画像の横幅を取得
-    canvas.height = imgElement.height; // 画像の高さを取得
+    canvas.width = imgElement.width; // 元の画像の横幅をcanvas要素のwidthに設定
+    canvas.height = imgElement.height; // 元の画像の高さをcanvas要素のheightに設定
 
+    /**
+     * 画像の上でマウスを動かしたときに、ズームの画像を描画する
+     */
     imgElement.addEventListener("mousemove", (event) => {
         if (document.querySelectorAll(".rect")) {
             document.querySelectorAll(".rect").forEach(function (elem) {
@@ -26,40 +35,37 @@ imgElement.onload = () => {
         let left = event.offsetX;
         let top = event.offsetY;
 
-        let xmax;
-        let ymax;
+        let xMaxLength; // x方向にマウスが移動する理論上の限界値
+        let yMaxLength; // y方向にマウスが移動する理論上の限界値
 
         switch (magnification) {
             case "2":
-                xmax = imgElement.width * 0.75;
-                ymax = imgElement.height * 0.75;
+                xMaxLength = imgElement.width * 0.75;
+                yMaxLength = imgElement.height * 0.75;
                 break;
-            // case "3":
-            //     xmax = imgElement.width * 0.4;
-            //     ymax = imgElement.height * 0.4;
-            //     break;
-
             default:
                 break;
         }
 
-        if (left > xmax) {
-            left = xmax;
+        // 正の方向は、限界値を超えたら限界値で止める
+        // 負の方向は、画像の縦横の長さから限界値を引いた値を下回らないようにする
+        if (left > xMaxLength) {
+            left = xMaxLength;
         }
-        if (top > ymax) {
-            top = ymax;
+        if (top > yMaxLength) {
+            top = yMaxLength;
         }
-        if (left < imgElement.width - xmax) {
-            left = imgElement.width - xmax;
+        if (left < imgElement.width - xMaxLength) {
+            left = imgElement.width - xMaxLength;
         }
-        if (top < imgElement.height - ymax) {
-            top = imgElement.height - ymax;
+        if (top < imgElement.height - yMaxLength) {
+            top = imgElement.height - yMaxLength;
         }
 
         const imageOffsetX = left - (canvas.width - imgElement.width) / 2;
         const imageOffsetY = top - (canvas.height - imgElement.height) / 2;
 
-        const centerX = parseInt(imageOffsetX) * magnification;
+        const centerX = imageOffsetX * magnification;
         const centerY = imageOffsetY * magnification;
 
         let positionX;
@@ -76,7 +82,8 @@ imgElement.onload = () => {
         // 描画前にcanvasをクリア
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        ctx.drawImage(imgElement, positionX, positionY, canvas.width * magnification, canvas.height * magnification); // 画像を描画する方法を決定
+        // 画像を描画する方法を決定
+        ctx.drawImage(imgElement, positionX, positionY, canvas.width * magnification, canvas.height * magnification);
 
         // canvas要素を画面に表示
         const rectElement = document.createElement("div");
@@ -94,7 +101,9 @@ imgElement.onload = () => {
         document.body.appendChild(rectElement);
     });
 
-    // 画像からマウスが外れると非表示にする
+    /**
+     * 画像からマウスが外れると拡大画像を非表示にする
+     */
     imgElement.addEventListener("mouseout", function (event) {
         if (document.querySelectorAll(".rect")) {
             document.querySelectorAll(".rect").forEach(function (elem) {
